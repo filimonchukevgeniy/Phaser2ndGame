@@ -1,6 +1,6 @@
 var config = {
     type: Phaser.AUTO,
-    width: 1920,
+    width: 1200,
     height: 1080,
     // для this.physics
     physics: {
@@ -22,12 +22,14 @@ const game = new Phaser.Game(config);
 var cursors; 
 var enemies;
 var speed = 4;
+var score = 0 ;
 
 function preload ()
 {
     this.load.image("hero", "assets/hero.png");
     this.load.image("sky" , "assets/Sky.png");
     this.load.image("block", "assets/block.png");
+    this.load.image("coin", "assets/coin.png");
 }
 
 function create()
@@ -35,14 +37,17 @@ function create()
     
     this.add.image(0, 0, 'sky').setOrigin(0, 0);
     this.player = this.physics.add.sprite(100, 100, 'hero');
-    
+
+    coinGroup = this.physics.add.group()
+    coin = coinGroup.create(500 , 300 , "coin")
+
     platforms = this.physics.add.staticGroup(); 
 
     
     
 
     for (var i = 0; i < 50; i++) {
-        var platform = platforms.create(40 * i, 685, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(40 * i, 690, 'block').setScale(3).refreshBody();
 
     }
 
@@ -70,8 +75,13 @@ function create()
     
 
     this.physics.add.collider(enemies, platforms);
+    this.physics.add.collider(coinGroup, platforms);
+
+    this.physics.add.overlap(this.player, coin, collectCoin, null, this);
 
     this.physics.add.overlap(this.player, enemies, collideWithEnemy, null, this);
+
+    
 }
 
 function update()
@@ -105,6 +115,16 @@ function collideWithEnemy(plane, enemy) {
     this.speed = 1;
     
 }
+
+function collectCoin()
+{
+    coin.disableBody(true, true);
+    coin = coinGroup.create(500 , 300 , "coin");
+    
+    
+}
+
+
 
 function restartGame() 
 {
