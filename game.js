@@ -26,7 +26,9 @@ var score = 0 ;
 
 function preload ()
 {
-    this.load.image("hero", "assets/hero.png");
+    this.load.spritesheet('hero', 
+    'assets/hero.png',
+    { frameWidth: 100, frameHeight: 75 });
     this.load.image("sky" , "assets/Sky.png");
     this.load.image("block", "assets/block.png");
     this.load.image("coin", "assets/coin.png");
@@ -34,6 +36,13 @@ function preload ()
 
 function create()
 {
+    this.anims.create({
+        key: 'walk',
+        frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 1 }),
+        frameRate: 10,
+        repeat: -1 
+    });
+
     
     this.add.image(0, 0, 'sky').setOrigin(0, 0);
     this.player = this.physics.add.sprite(100, 100, 'hero');
@@ -88,10 +97,15 @@ function update()
 {
     if (cursors.left.isDown) {
         this.player.setVelocityX(-40*speed);
+        this.plane.flipX = true; 
+        this.plane.anims.play('walk', true);
     } else if (cursors.right.isDown) {
         this.player.setVelocityX(40*speed);
+        this.plane.flipX = false; 
+        this.plane.anims.play('walk', true);
     } else {
         this.player.setVelocityX(0);
+        this.plane.anims.stop('walk');
     }
     
     if (cursors.up.isDown && this.player.body.touching.down) {
