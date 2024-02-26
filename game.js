@@ -1,6 +1,6 @@
 var config = {
     type: Phaser.AUTO,
-    width: 1200,
+    width: 1980,
     height: 1080,
     
     physics: {
@@ -13,7 +13,8 @@ var config = {
     scene: {
         preload: preload,
         create: create,
-        update: update
+        update: update,
+       // restart: restart,
     }
 };
 
@@ -56,17 +57,19 @@ function create()
     
 
     for (var i = 0; i < 50; i++) {
-        var platform = platforms.create(40 * i, 690, 'block').setScale(3).refreshBody();
+        var platform = platforms.create(40 * i, 960, 'block').setScale(3).refreshBody();
 
     }
 
     for (var i = 0; i < 5; i++) {
-        var platform = platforms.create(300 + 40 * i, 530, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(600 + 40 * i, 430, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(300 + 40 * i, 800, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(600 + 40 * i, 650, 'block').setScale(2).refreshBody();
         var platform = platforms.create(900 + 40 * i, 530, 'block').setScale(2).refreshBody();
         var platform = platforms.create(1200 + 40 * i, 360, 'block').setScale(2).refreshBody();
         var platform = platforms.create(1500 + 40 * i, 500, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1800 + 40 * i, 590, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1800 + 40 * i, 840, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1500 + 40 * i, 700, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1800 + 40 * i, 600, 'block').setScale(2).refreshBody();
     }
     cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, platforms);
@@ -98,7 +101,7 @@ function update()
     if (cursors.left.isDown) {
         this.player.setVelocityX(-40*speed);
         this.player.flipX = true; 
-        this.plane.anims.play('walk', true);
+        this.player.anims.play('walk', true);
     } else if (cursors.right.isDown) {
         this.player.setVelocityX(40*speed);
         this.player.flipX = false; 
@@ -111,8 +114,9 @@ function update()
     if (cursors.up.isDown && this.player.body.touching.down) {
         this.player.setVelocityY(-450);
     }
-    if (this.player.y > 1080) 
+    if (this.player.y > 1000) 
     { 
+      
         restartGame();
     }
     
@@ -123,10 +127,12 @@ function collideWithEnemy(plane, enemy) {
     this.time.delayedCall(3000, function() {
         // Після 3 секунд збільшуємо швидкість героя назад
         this.speed = 4;
+        console.log("speed 4")
         
     }, [], this);
     // Зменшення швидкості героя
     this.speed = 1;
+    console.log("speed 1")
     
 }
 
@@ -143,5 +149,7 @@ function collectCoin()
 function restartGame() 
 {
     // Перезавантаження гри
-    this.scene.restart();
+    console.log('restart')
+    location.reload();
+    //this.scene.create();
 }
