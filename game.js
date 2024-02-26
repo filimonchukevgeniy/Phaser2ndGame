@@ -2,7 +2,7 @@ var config = {
     type: Phaser.AUTO,
     width: 1200,
     height: 1080,
-    // для this.physics
+    
     physics: {
         default: 'arcade',
         arcade: {
@@ -97,15 +97,15 @@ function update()
 {
     if (cursors.left.isDown) {
         this.player.setVelocityX(-40*speed);
-        this.plane.flipX = true; 
+        this.player.flipX = true; 
         this.plane.anims.play('walk', true);
     } else if (cursors.right.isDown) {
         this.player.setVelocityX(40*speed);
-        this.plane.flipX = false; 
-        this.plane.anims.play('walk', true);
+        this.player.flipX = false; 
+        this.player.anims.play('walk', true);
     } else {
         this.player.setVelocityX(0);
-        this.plane.anims.stop('walk');
+        this.player.anims.stop('walk');
     }
     
     if (cursors.up.isDown && this.player.body.touching.down) {
