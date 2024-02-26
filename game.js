@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
     width: 1980,
-    height: 1080,
+    height: 880,
     
     physics: {
         default: 'arcade',
@@ -33,13 +33,14 @@ function preload ()
     this.load.image("sky" , "assets/Sky.png");
     this.load.image("block", "assets/block.png");
     this.load.image("coin", "assets/coin.png");
+    this.load.image("backblock" , "assets/block2.png")
 }
 
 function create()
 {
     this.anims.create({
         key: 'walk',
-        frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 1 }),
+        frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 5 }),
         frameRate: 10,
         repeat: -1 
     });
@@ -52,24 +53,28 @@ function create()
     coin = coinGroup.create(500 , 300 , "coin")
 
     platforms = this.physics.add.staticGroup(); 
+    backblock = this.physics.add.staticGroup();
+
+    backblock.create(0 , 760 , "backblock").setScale(2).refreshBody();
+    backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody();
 
     
     
 
     for (var i = 0; i < 50; i++) {
-        var platform = platforms.create(40 * i, 960, 'block').setScale(3).refreshBody();
+        var platform = platforms.create(40 * i, 660, 'block').setScale(3).refreshBody();
 
     }
 
     for (var i = 0; i < 5; i++) {
-        var platform = platforms.create(300 + 40 * i, 800, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(600 + 40 * i, 650, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(900 + 40 * i, 530, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1200 + 40 * i, 360, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1500 + 40 * i, 500, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1800 + 40 * i, 840, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1500 + 40 * i, 700, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1800 + 40 * i, 600, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(300 + 40 * i, 500, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(600 + 40 * i, 400, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(900 + 40 * i, 230, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1200 + 40 * i, 160, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1500 + 40 * i, 200, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1800 + 40 * i, 540, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1500 + 40 * i, 400, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(1800 + 40 * i, 300, 'block').setScale(2).refreshBody();
     }
     cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, platforms);
