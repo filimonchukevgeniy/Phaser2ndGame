@@ -24,6 +24,8 @@ var cursors;
 var enemies;
 var speed = 4;
 var score = 0 ;
+var platform_x = 0;
+
 
 function preload ()
 {
@@ -34,6 +36,7 @@ function preload ()
     this.load.image("block", "assets/block.png");
     this.load.image("coin", "assets/coin.png");
     this.load.image("backblock" , "assets/block2.png")
+    this.load.image("platform" , "assets/platform1.png")
 }
 
 function create()
@@ -47,6 +50,8 @@ function create()
 
     
     this.add.image(0, 0, 'sky').setOrigin(0, 0);
+    this.add.image(2000, 0, 'sky').setOrigin(0, 0);
+
     this.player = this.physics.add.sprite(100, 100, 'hero');
 
     coinGroup = this.physics.add.group()
@@ -54,9 +59,14 @@ function create()
 
     platforms = this.physics.add.staticGroup(); 
     backblock = this.physics.add.staticGroup();
+    platform = this.physics.add.staticGroup();
+
+    this.physics.add.collider(this.player, platform);
 
     backblock.create(0 , 760 , "backblock").setScale(2).refreshBody();
     backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody();
+
+    platform.create(2200 , 500 , 'platform').setScale(2).refreshBody();
 
     
     
@@ -78,6 +88,7 @@ function create()
     }
     cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, platforms);
+    
     
     
 
@@ -115,7 +126,9 @@ function update()
         this.player.setVelocityX(0);
         this.player.anims.stop('walk');
     }
-    
+    if(cursors.down.isDown){
+        this.player.setVelocityX(160*speed);
+    }
     if (cursors.up.isDown && this.player.body.touching.down) {
         this.player.setVelocityY(-450);
     }
@@ -124,6 +137,21 @@ function update()
       
         restartGame();
     }
+
+    //if(this.platform_x<5){
+    //    this.platform.setVelocityX(50);
+    //   this.platform_x ++;
+
+        
+
+
+    //}else
+    //{
+    //    this.platform.setVelocityX(-250);
+    //    this.platform_x = 0;
+
+
+   // }
     
 }
 
