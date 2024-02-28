@@ -1,7 +1,7 @@
 var config = {
     type: Phaser.AUTO,
     width: 1980,
-    height: 880,
+    height: 1080,
     
     physics: {
         default: 'arcade',
@@ -25,6 +25,7 @@ var enemies;
 var speed = 4;
 var score = 0 ;
 var platform_x = 0;
+var worldWidth = 10000
 
 
 function preload ()
@@ -37,6 +38,7 @@ function preload ()
     this.load.image("coin", "assets/coin.png");
     this.load.image("backblock" , "assets/block2.png")
     this.load.image("platform" , "assets/platform1.png")
+    this.load.image("fon" , "assets/fon.png")
 }
 
 function create()
@@ -48,9 +50,11 @@ function create()
         repeat: -1 
     });
 
+    this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0);
+
     
-    this.add.image(0, 0, 'sky').setOrigin(0, 0);
-    this.add.image(2000, 0, 'sky').setOrigin(0, 0);
+    //this.add.image(0, 0, 'sky').setOrigin(0, 0);
+    //this.add.image(2000, 0, 'sky').setOrigin(0, 0);
 
     this.player = this.physics.add.sprite(100, 100, 'hero');
 
@@ -63,15 +67,20 @@ function create()
 
     this.physics.add.collider(this.player, platform);
 
-    backblock.create(0 , 760 , "backblock").setScale(2).refreshBody();
-    backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody();
+    
+    //backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+    
 
     platform.create(2200 , 500 , 'platform').setScale(2).refreshBody();
 
-    
+    //for(var j = 0 ; j < 2; j++){
+    //    backblock.create(j*1000 , 660 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+    //    backblock.create(j*1000 , 800 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+     //   backblock.create(j*1000 , 960 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+    //}
     
 
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 100; i++) {
         var platform = platforms.create(40 * i, 660, 'block').setScale(3).refreshBody();
 
     }
