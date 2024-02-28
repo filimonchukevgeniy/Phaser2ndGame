@@ -68,19 +68,23 @@ function create()
     this.physics.add.collider(this.player, platform);
 
     
-    //backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+    backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
     
 
     platform.create(2200 , 500 , 'platform').setScale(2).refreshBody();
 
-    //for(var j = 0 ; j < 2; j++){
-    //    backblock.create(j*1000 , 660 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
-    //    backblock.create(j*1000 , 800 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
-     //   backblock.create(j*1000 , 960 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+    //for(var x = 0 ; x < worldWidth ; x = x + 450){
+    //    platform.create(x , 1000 , "block").setOrigin(0 , 0 ).refreshBody();
     //}
+
+    for(var j = 0 ; j < 4; j++){
+        backblock.create(j*1000 , 660 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+        backblock.create(j*1000 , 800 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+        backblock.create(j*1000 , 960 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+    }
     
 
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 150; i++) {
         var platform = platforms.create(40 * i, 660, 'block').setScale(3).refreshBody();
 
     }
