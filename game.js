@@ -140,7 +140,13 @@ function update()
         this.player.anims.stop('walk');
     }
     if(cursors.down.isDown){
-        this.player.setVelocityX(160*speed);
+        if (cursors.left.isDown) {
+            this.player.setVelocityX(-160*speed);
+ 
+        } else if (cursors.right.isDown) {
+            this.player.setVelocityX(160*speed);
+        }
+            
     }
     if (cursors.up.isDown && this.player.body.touching.down) {
         this.player.setVelocityY(-450);
