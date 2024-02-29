@@ -40,6 +40,10 @@ function preload ()
     this.load.image("platform" , "assets/platform1.png")
     this.load.image("fon" , "assets/fon.png")
     this.load.image("blockfon" , "assets/fon1.png")
+    this.load.image("Rblock" , "assets/Rightblock.png")
+    this.load.image("Lblock" , "assets/Leftblock.png")
+    this.load.image("fon2","assets/fon2.png")
+
 }
 
 function create()
@@ -51,8 +55,8 @@ function create()
         repeat: -1 
     });
 
-    this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0);
-    this.add.tileSprite(0 , 660 , worldWidth , 1080 , "backblock").setScale(2).setOrigin(0,0).setDepth(1);
+    this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0).setDepth(-2);;
+    this.add.tileSprite(0 , 660 , worldWidth , 1080 , "backblock").setScale(1).setOrigin(0,0).setDepth(1);
 
     
     //this.add.image(0, 0, 'sky').setOrigin(0, 0);
@@ -66,8 +70,10 @@ function create()
     platforms = this.physics.add.staticGroup(); 
     backblock = this.physics.add.staticGroup();
     platform = this.physics.add.staticGroup();
+    fon = this.physics.add.staticGroup();
 
     this.physics.add.collider(this.player, platform);
+
 
     
 
@@ -83,25 +89,75 @@ function create()
     
 
     for (var i = 0; i < 150; i++) {
-        var platform = platforms.create(40 * i, 660, 'block').setScale(3).refreshBody().setDepth(1);
+        var platform = platforms.create(40 * i, 660, 'block').setScale(2).refreshBody().setDepth(1);
 
     }
 
-    for (var i = 0; i < 5; i++) {
-        var platform = platforms.create(300 + 40 * i, 500, 'block').setScale(2).refreshBody().setDepth(1);
-        this.add.tileSprite(280 , 500 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
-        var platform = platforms.create(600 + 40 * i, 400, 'block').setScale(2).refreshBody().setDepth(1);
-        this.add.tileSprite(580 , 400 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
-        var platform = platforms.create(900 + 40 * i, 230, 'block').setScale(2).refreshBody().setDepth(1);
-        this.add.tileSprite(880 , 230 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
-        var platform = platforms.create(1200 + 40 * i, 160, 'block').setScale(2).refreshBody().setDepth(1);
-        this.add.tileSprite(1180 , 160 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
-        var platform = platforms.create(1500 + 40 * i, 200, 'block').setScale(2).refreshBody().setDepth(1);
-        this.add.tileSprite(1480 , 200 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
-        var platform = platforms.create(1800 + 40 * i, 540, 'block').setScale(2).refreshBody().setDepth(1);
-        this.add.tileSprite(1780 , 300 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
-        var platform = platforms.create(1500 + 40 * i, 400, 'block').setScale(2).refreshBody().setDepth(1);
-        var platform = platforms.create(1800 + 40 * i, 300, 'block').setScale(2).refreshBody().setDepth(1);
+    for (var i = 0; i < 3; i++) {
+        var x = 300
+        var y = 500
+        //1
+        var platform = platforms.create(x +40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(x-20 , y-4 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+
+        //2
+        x = 600
+        y = 420
+        var platform = platforms.create(x +40 + 40 * i, y , 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(580 , 418 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        //3
+        x = 900
+        y = 230
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(880 , 228 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        fon.create(x+180, y-15 + i*100+300, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        //4
+        x = 1200
+        y = 160
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(1180 , 158 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        fon.create(x+180, y+23 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        fon.create(x+180, y-15 + i*100+300, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        //5
+        x = 1500
+        y = 200
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(1480 , 198 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        fon.create(x+180, y+90 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        fon.create(x+180, y-15 + i*100+300, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        //6
+        x = 1800
+        y = 300
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(1780 , 298 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        
+        //7
+        x = 1500
+        y = 400
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        //8
+        x = 1800
+        y = 540
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
     }
     cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, platforms);
