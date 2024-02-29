@@ -39,6 +39,7 @@ function preload ()
     this.load.image("backblock" , "assets/block2.png")
     this.load.image("platform" , "assets/platform1.png")
     this.load.image("fon" , "assets/fon.png")
+    this.load.image("blockfon" , "assets/fon1.png")
 }
 
 function create()
@@ -51,12 +52,13 @@ function create()
     });
 
     this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0);
+    this.add.tileSprite(0 , 660 , worldWidth , 1080 , "backblock").setScale(2).setOrigin(0,0).setDepth(1);
 
     
     //this.add.image(0, 0, 'sky').setOrigin(0, 0);
     //this.add.image(2000, 0, 'sky').setOrigin(0, 0);
 
-    this.player = this.physics.add.sprite(100, 100, 'hero');
+    this.player = this.physics.add.sprite(100, 100, 'hero').setDepth(7);
 
     coinGroup = this.physics.add.group()
     coin = coinGroup.create(500 , 300 , "coin")
@@ -68,7 +70,7 @@ function create()
     this.physics.add.collider(this.player, platform);
 
     
-    backblock.create(1000 , 760 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
+
     
 
     platform.create(2200 , 500 , 'platform').setScale(2).refreshBody();
@@ -77,27 +79,29 @@ function create()
     //    platform.create(x , 1000 , "block").setOrigin(0 , 0 ).refreshBody();
     //}
 
-    for(var j = 0 ; j < 4; j++){
-        backblock.create(j*1000 , 660 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
-        backblock.create(j*1000 , 800 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
-        backblock.create(j*1000 , 960 , "backblock").setScale(2).refreshBody().setOrigin(0.0);
-    }
+
     
 
     for (var i = 0; i < 150; i++) {
-        var platform = platforms.create(40 * i, 660, 'block').setScale(3).refreshBody();
+        var platform = platforms.create(40 * i, 660, 'block').setScale(3).refreshBody().setDepth(1);
 
     }
 
     for (var i = 0; i < 5; i++) {
-        var platform = platforms.create(300 + 40 * i, 500, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(600 + 40 * i, 400, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(900 + 40 * i, 230, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1200 + 40 * i, 160, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1500 + 40 * i, 200, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1800 + 40 * i, 540, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1500 + 40 * i, 400, 'block').setScale(2).refreshBody();
-        var platform = platforms.create(1800 + 40 * i, 300, 'block').setScale(2).refreshBody();
+        var platform = platforms.create(300 + 40 * i, 500, 'block').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(280 , 500 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        var platform = platforms.create(600 + 40 * i, 400, 'block').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(580 , 400 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        var platform = platforms.create(900 + 40 * i, 230, 'block').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(880 , 230 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        var platform = platforms.create(1200 + 40 * i, 160, 'block').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(1180 , 160 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        var platform = platforms.create(1500 + 40 * i, 200, 'block').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(1480 , 200 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        var platform = platforms.create(1800 + 40 * i, 540, 'block').setScale(2).refreshBody().setDepth(1);
+        this.add.tileSprite(1780 , 300 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
+        var platform = platforms.create(1500 + 40 * i, 400, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(1800 + 40 * i, 300, 'block').setScale(2).refreshBody().setDepth(1);
     }
     cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, platforms);
