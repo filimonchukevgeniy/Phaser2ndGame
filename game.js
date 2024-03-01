@@ -24,8 +24,9 @@ var cursors;
 var enemies;
 var speed = 4;
 var score = 0 ;
-var platform_x = 0;
-var worldWidth = 10000
+var platform_x = 1;
+var worldWidth = 10000;
+var scoreText;
 
 
 function preload ()
@@ -43,11 +44,15 @@ function preload ()
     this.load.image("Rblock" , "assets/Rightblock.png")
     this.load.image("Lblock" , "assets/Leftblock.png")
     this.load.image("fon2","assets/fon2.png")
+    this.load.image("stone1" , "assets/stone1.png")
+    this.load.image("stone2" , "assets/stone2.png")
 
 }
 
 function create()
 {
+    scoreText = this.add.text(0, 20, 'Score: 0', { fontFamily: 'Arial', fontSize: 32, color: '#ffffff' });
+
     this.anims.create({
         key: 'walk',
         frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 5 }),
@@ -55,7 +60,7 @@ function create()
         repeat: -1 
     });
 
-    this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0).setDepth(-2);;
+    this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0).setDepth(-10);;
     this.add.tileSprite(0 , 660 , worldWidth , 1080 , "backblock").setScale(1).setOrigin(0,0).setDepth(1);
 
     
@@ -81,19 +86,23 @@ function create()
 
     platform.create(2200 , 500 , 'platform').setScale(2).refreshBody();
 
+
+
     //for(var x = 0 ; x < worldWidth ; x = x + 450){
     //    platform.create(x , 1000 , "block").setOrigin(0 , 0 ).refreshBody();
     //}
 
-
+    for (var i = 0; i < 15; i++) {                  //підлога
+        coin = coinGroup.create(600 +i*100 , 100 , "coin");
+    }
     
 
-    for (var i = 0; i < 150; i++) {
+    for (var i = 0; i < 150; i++) {                  //підлога
         var platform = platforms.create(40 * i, 660, 'block').setScale(2).refreshBody().setDepth(1);
 
     }
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 3; i++) {                   //платформи
         var x = 300
         var y = 500
         //1
@@ -102,6 +111,7 @@ function create()
         var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
         this.add.tileSprite(x-20 , y-4 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
         fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        fon.create(x+170, y-120 , 'stone1').setScale(1.1).refreshBody().setDepth(-2).setOrigin(0,0);
 
         //2
         x = 600
@@ -111,6 +121,7 @@ function create()
         var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
         this.add.tileSprite(580 , 418 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
         fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        fon.create(x+170, y-120 , 'stone2').setScale(1.1).refreshBody().setDepth(-2).setOrigin(0,0);
         //3
         x = 900
         y = 230
@@ -120,6 +131,7 @@ function create()
         this.add.tileSprite(880 , 228 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
         fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
         fon.create(x+180, y-15 + i*100+300, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
+        fon.create(x+170, y-120 , 'stone1').setScale(1.1).refreshBody().setDepth(-2).setOrigin(0,0);
         //4
         x = 1200
         y = 160
@@ -158,7 +170,21 @@ function create()
         var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
         var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
         var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+
+        x = 900
+        y = 540
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
+
+        x = 1200
+        y = 440
+        var platform = platforms.create(x+40 + 40 * i, y, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x, y, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(x+160, y, 'Rblock').setScale(2).refreshBody().setDepth(1);
     }
+    
+
     cursors = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player, platforms);
     
@@ -178,19 +204,27 @@ function create()
     this.physics.add.collider(enemies, platforms);
     this.physics.add.collider(coinGroup, platforms);
 
-    this.physics.add.overlap(this.player, coin, collectCoin, null, this);
+    this.physics.add.overlap(this.player, coinGroup, collectCoin, null, this);
 
     this.physics.add.overlap(this.player, enemies, collideWithEnemy, null, this);
+
+
 
     
 }
 
 function update()
 {
+    scoreText.x = this.cameras.main.scrollX + 0; 
+    scoreText.y = this.cameras.main.scrollY + 20;
+
+
     if (cursors.left.isDown) {
         this.player.setVelocityX(-40*speed);
         this.player.flipX = true; 
         this.player.anims.play('walk', true);
+        
+        
     } else if (cursors.right.isDown) {
         this.player.setVelocityX(40*speed);
         this.player.flipX = false; 
@@ -216,22 +250,6 @@ function update()
       
         restartGame();
     }
-
-    //if(this.platform_x<5){
-    //    this.platform.setVelocityX(50);
-    //   this.platform_x ++;
-
-        
-
-
-    //}else
-    //{
-    //    this.platform.setVelocityX(-250);
-    //    this.platform_x = 0;
-
-
-   // }
-    
 }
 
 function collideWithEnemy(plane, enemy) {
@@ -248,13 +266,17 @@ function collideWithEnemy(plane, enemy) {
     
 }
 
-function collectCoin()
+function collectCoin(player , coin)
 {
     coin.disableBody(true, true);
-    coin = coinGroup.create(500 , 300 , "coin");
+    
+    score ++;
+    scoreText.setText('Score: ' + score);
     
     
 }
+
+
 
 
 
