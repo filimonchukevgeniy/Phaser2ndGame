@@ -27,7 +27,9 @@ var score = 0 ;
 var platform_x = 1;
 var worldWidth = 10000;
 var scoreText;
-var lvl = 1 ;
+var lvl = 2 ;
+var by = 1 ;
+var x = Phaser.Math.Between(-5, 5);
 
 
 function preload ()
@@ -51,15 +53,16 @@ function preload ()
     this.load.image("min" , "assets/min.png")
     this.load.image("fon3" , "assets/fon3.png")
     this.load.image("portal" , "assets/teleportal.png")
+    this.load.image("bomb" , "assets/bomb.png")
     
 
 }
 
 function create()
 {
-    if(lvl = 1){
+    if(lvl === 1){
         this.player = this.physics.add.sprite(100, 100, 'hero').setDepth(7);
-    }else if(lvl = 2 ){
+    }else if(lvl === 2 ){
         this.player = this.physics.add.sprite(4000, 100, 'hero').setDepth(7);
         teleport();
     }
@@ -75,7 +78,7 @@ function create()
 
     this.add.tileSprite(0 , 0 , worldWidth ,640 , "fon").setOrigin(0,0).setDepth(-10);;
     this.add.tileSprite(0 , 660 , 2500 , 1080 , "backblock").setScale(1).setOrigin(0,0).setDepth(1);
-    this.add.tileSprite(2500 , 640 , worldWidth , 440 , "fon3").setScale(1).setOrigin(0,0).setDepth(1);
+    this.add.tileSprite(2500 , 640 , worldWidth , 440 , "fon3").setScale(1).setOrigin(0,0).setDepth(-2);
 
     
     //this.add.image(0, 0, 'sky').setOrigin(0, 0);
@@ -113,6 +116,8 @@ function create()
 
     bush.create(200 , 600 , "bush").setDepth(-1).setScale(2);
     bush.create(1400 , 150 , "bush").setDepth(-1).setScale(2);
+
+    bombGroup = this.physics.add.group();
 
     portalGroup = this.physics.add.group();
     this.physics.add.collider(portalGroup, platform2Group);
@@ -236,6 +241,8 @@ function create()
 
     this.physics.add.collider(enemies, platforms);
     this.physics.add.collider(coinGroup, platforms);
+    this.physics.add.collider(bombGroup, platform2Group);
+    this.physics.add.collider(bombGroup, platforms);
 
     this.physics.add.overlap(this.player, coinGroup, collectCoin, null, this);
 
@@ -245,10 +252,29 @@ function create()
 
     this.physics.add.overlap(this.player, portalGroup, teleport, null, this);
 
+    this.physics.add.overlap(this.player, bombGroup, restartGame, null, this);
+
+
+
 
 
     /////////level 2
+    for (var i = 0; i < 10; i++) {                  //підлога
+        var platform = platforms.create(4000 + 40 * i, 660, 'block').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(3960, 660, 'Lblock').setScale(2).refreshBody().setDepth(1);
+        var platform = platforms.create(4400, 660, 'Rblock').setScale(2).refreshBody().setDepth(1);
+        
+    }
+    platform2 = platform2Group.create(4600 , 500 , 'platform').setScale(2).refreshBody();
+    platform2 = platform2Group.create(5000 , 400 , 'platform').setScale(2).refreshBody();
+    platform2 = platform2Group.create(4550 , 300 , 'platform').setScale(2).refreshBody();
+    platform2 = platform2Group.create(4150 , 200 , 'platform').setScale(2).refreshBody();
+    platform2 = platform2Group.create(3750 , 300 , 'platform').setScale(2).refreshBody();
+    platform2 = platform2Group.create(5400 , 500 , 'platform').setScale(2).refreshBody();
 
+    for (var i = 0; i < 50; i++) {                  //підлога
+        coin = coinGroup.create(3000 +i*100 , 100 , "coin");
+    }
  
 
 
@@ -259,6 +285,9 @@ function update()
 {
     scoreText.x = this.cameras.main.scrollX + 0; 
     scoreText.y = this.cameras.main.scrollY + 20;
+
+    bombGroup.setVelocityX(-300)
+    bombGroup.setVelocityY(80*by)
 
 
     if (cursors.left.isDown) {
@@ -314,6 +343,8 @@ function collectCoin(player , coin)
     
     score ++;
     scoreText.setText('Score: ' + score);
+    createBomb(x)
+
     
     
 }
@@ -325,24 +356,33 @@ function teleport (lvl , player){
 
         //// lvl 2
 
-        for (var i = 0; i < 10; i++) {                  //підлога
-            var platform = platforms.create(4000 + 40 * i, 660, 'block').setScale(2).refreshBody().setDepth(1);
-            var platform = platforms.create(3960, 660, 'Lblock').setScale(2).refreshBody().setDepth(1);
-            var platform = platforms.create(4400, 660, 'Rblock').setScale(2).refreshBody().setDepth(1);
-            
-        }
-        platform2 = platform2Group.create(4600 , 500 , 'platform').setScale(2).refreshBody();
-        platform2 = platform2Group.create(5000 , 400 , 'platform').setScale(2).refreshBody();
-        platform2 = platform2Group.create(4550 , 300 , 'platform').setScale(2).refreshBody();
-        platform2 = platform2Group.create(4150 , 200 , 'platform').setScale(2).refreshBody();
-        platform2 = platform2Group.create(3750 , 300 , 'platform').setScale(2).refreshBody();
-        platform2 = platform2Group.create(5400 , 500 , 'platform').setScale(2).refreshBody();
-
-        for (var i = 0; i < 50; i++) {                  //підлога
-            coin = coinGroup.create(3000 +i*100 , 100 , "coin");
-        }
+        
     }
 }
+
+function createBomb(x) {
+     // Прибрати монету
+    
+    // Створення бомби
+
+    x = Phaser.Math.Between(-5, 5);
+    
+    bomb = bombGroup.create(6300 + x*200, 0, 'bomb').setScale(0.5);
+
+    x = Phaser.Math.Between(-5, 5);
+
+    bomb = bombGroup.create(5300 - x*500, 0, 'bomb').setScale(0.5);
+
+    x = Phaser.Math.Between(-5, 5);
+    
+    bomb = bombGroup.create(6300 + x*200, 0, 'bomb').setScale(0.5);
+    
+
+    // Встановлення взаємодії бомби з платформами другого рівня
+    
+}
+
+
 
 
 
