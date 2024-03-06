@@ -27,6 +27,7 @@ var score = 0 ;
 var platform_x = 1;
 var worldWidth = 10000;
 var scoreText;
+var lvl = 1 ;
 
 
 function preload ()
@@ -46,11 +47,23 @@ function preload ()
     this.load.image("fon2","assets/fon2.png")
     this.load.image("stone1" , "assets/stone1.png")
     this.load.image("stone2" , "assets/stone2.png")
+    this.load.image("bush" , "assets/bush.png")
+    this.load.image("min" , "assets/min.png")
+    this.load.image("fon3" , "assets/fon3.png")
+    this.load.image("portal" , "assets/teleportal.png")
+    
 
 }
 
 function create()
 {
+    if(lvl = 1){
+        this.player = this.physics.add.sprite(100, 100, 'hero').setDepth(7);
+    }else if(lvl = 2 ){
+        this.player = this.physics.add.sprite(4000, 100, 'hero').setDepth(7);
+        teleport();
+    }
+
     scoreText = this.add.text(0, 20, 'Score: 0', { fontFamily: 'Arial', fontSize: 32, color: '#ffffff' });
 
     this.anims.create({
@@ -60,14 +73,14 @@ function create()
         repeat: -1 
     });
 
-    this.add.tileSprite(0 , 0 , worldWidth ,1080 , "fon").setOrigin(0,0).setDepth(-10);;
-    this.add.tileSprite(0 , 660 , worldWidth , 1080 , "backblock").setScale(1).setOrigin(0,0).setDepth(1);
+    this.add.tileSprite(0 , 0 , worldWidth ,640 , "fon").setOrigin(0,0).setDepth(-10);;
+    this.add.tileSprite(0 , 660 , 2500 , 1080 , "backblock").setScale(1).setOrigin(0,0).setDepth(1);
+    this.add.tileSprite(2500 , 640 , worldWidth , 440 , "fon3").setScale(1).setOrigin(0,0).setDepth(1);
 
     
     //this.add.image(0, 0, 'sky').setOrigin(0, 0);
     //this.add.image(2000, 0, 'sky').setOrigin(0, 0);
 
-    this.player = this.physics.add.sprite(100, 100, 'hero').setDepth(7);
 
     coinGroup = this.physics.add.group()
     coin = coinGroup.create(500 , 300 , "coin")
@@ -75,18 +88,37 @@ function create()
     platforms = this.physics.add.staticGroup(); 
     backblock = this.physics.add.staticGroup();
     platform = this.physics.add.staticGroup();
+    bush = this.physics.add.staticGroup();
     fon = this.physics.add.staticGroup();
+    platform2Group = this.physics.add.staticGroup();
 
-    this.physics.add.collider(this.player, platform);
+    minGroup = this.physics.add.group()
+
+    this.physics.add.collider(this.player, platforms);
+    this.physics.add.collider(this.player, platform2Group);
+    this.physics.add.collider(coinGroup, platform2Group);
+    this.physics.add.collider(minGroup, platforms);
+
+    min = minGroup.create(600 , 600 , "min").setDepth(1);
+    min = minGroup.create(1150 , 600 , "min").setDepth(1);
+    min = minGroup.create(1750 , 600 , "min").setDepth(1);
+    min = minGroup.create(1250 , 100 , "min").setDepth(1);
 
 
     
 
     
 
-    platform.create(2200 , 500 , 'platform').setScale(2).refreshBody();
+    platform2 = platform2Group.create(2200 , 500 , 'platform').setScale(2).refreshBody();
 
+    bush.create(200 , 600 , "bush").setDepth(-1).setScale(2);
+    bush.create(1400 , 150 , "bush").setDepth(-1).setScale(2);
 
+    portalGroup = this.physics.add.group();
+    this.physics.add.collider(portalGroup, platform2Group);
+
+    portal = portalGroup.create(2200 , 400 , "portal").setDepth(1).setScale(0.5);
+    
 
     //for(var x = 0 ; x < worldWidth ; x = x + 450){
     //    platform.create(x , 1000 , "block").setOrigin(0 , 0 ).refreshBody();
@@ -97,7 +129,7 @@ function create()
     }
     
 
-    for (var i = 0; i < 150; i++) {                  //підлога
+    for (var i = 0; i < 63; i++) {                  //підлога
         var platform = platforms.create(40 * i, 660, 'block').setScale(2).refreshBody().setDepth(1);
 
     }
@@ -112,6 +144,7 @@ function create()
         this.add.tileSprite(x-20 , y-4 , 200 , 1080 , "blockfon").setScale(1).setOrigin(0,0).setDepth(0);
         fon.create(x+180, y-15 + i*100, 'fon2').setScale(1).refreshBody().setDepth(-1).setOrigin(0,0);
         fon.create(x+170, y-120 , 'stone1').setScale(1.1).refreshBody().setDepth(-2).setOrigin(0,0);
+
 
         //2
         x = 600
@@ -208,9 +241,18 @@ function create()
 
     this.physics.add.overlap(this.player, enemies, collideWithEnemy, null, this);
 
+    this.physics.add.overlap(this.player, minGroup, restartGame, null, this);
+
+    this.physics.add.overlap(this.player, portalGroup, teleport, null, this);
 
 
-    
+
+    /////////level 2
+
+ 
+
+
+
 }
 
 function update()
@@ -274,6 +316,32 @@ function collectCoin(player , coin)
     scoreText.setText('Score: ' + score);
     
     
+}
+
+function teleport (lvl , player){
+    if (lvl = 1 && score > 15 ) {
+        this.player.x = 4000 ;
+        lvl ++ ;
+
+        //// lvl 2
+
+        for (var i = 0; i < 10; i++) {                  //підлога
+            var platform = platforms.create(4000 + 40 * i, 660, 'block').setScale(2).refreshBody().setDepth(1);
+            var platform = platforms.create(3960, 660, 'Lblock').setScale(2).refreshBody().setDepth(1);
+            var platform = platforms.create(4400, 660, 'Rblock').setScale(2).refreshBody().setDepth(1);
+            
+        }
+        platform2 = platform2Group.create(4600 , 500 , 'platform').setScale(2).refreshBody();
+        platform2 = platform2Group.create(5000 , 400 , 'platform').setScale(2).refreshBody();
+        platform2 = platform2Group.create(4550 , 300 , 'platform').setScale(2).refreshBody();
+        platform2 = platform2Group.create(4150 , 200 , 'platform').setScale(2).refreshBody();
+        platform2 = platform2Group.create(3750 , 300 , 'platform').setScale(2).refreshBody();
+        platform2 = platform2Group.create(5400 , 500 , 'platform').setScale(2).refreshBody();
+
+        for (var i = 0; i < 50; i++) {                  //підлога
+            coin = coinGroup.create(3000 +i*100 , 100 , "coin");
+        }
+    }
 }
 
 
