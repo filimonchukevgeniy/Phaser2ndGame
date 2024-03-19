@@ -32,6 +32,8 @@ var by = 1 ;
 var x = Phaser.Math.Between(-5, 5);
 
 
+
+
 function preload ()
 {
     this.load.spritesheet('hero', 
@@ -54,12 +56,19 @@ function preload ()
     this.load.image("fon3" , "assets/fon3.png")
     this.load.image("portal" , "assets/teleportal.png")
     this.load.image("bomb" , "assets/bomb.png")
+    this.load.spritesheet("zombe" , "assets/zombe.png" , { frameWidth: 100, frameHeight: 171 });
     
 
 }
 
 function create()
 {
+    playerCoordText = this.add.text(0, 50, 'Player: ', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' });
+
+
+
+ 
+
     if(lvl === 1){
         this.player = this.physics.add.sprite(100, 100, 'hero').setDepth(7);
     }else if(lvl === 2 ){
@@ -72,6 +81,13 @@ function create()
     this.anims.create({
         key: 'walk',
         frames: this.anims.generateFrameNumbers('hero', { start: 0, end: 5 }),
+        frameRate: 10,
+        repeat: -1 
+    });
+
+    this.anims.create({
+        key: 'zombe',
+        frames: this.anims.generateFrameNumbers('zombe', { start: 0, end: 3 }),
         frameRate: 10,
         repeat: -1 
     });
@@ -123,6 +139,7 @@ function create()
     this.physics.add.collider(portalGroup, platform2Group);
 
     portal = portalGroup.create(2200 , 400 , "portal").setDepth(1).setScale(0.5);
+    portal = portalGroup.create(3750 , 100 , "portal").setDepth(1).setScale(0.5).setDepth(-1);
     
 
     //for(var x = 0 ; x < worldWidth ; x = x + 450){
@@ -254,6 +271,8 @@ function create()
 
     this.physics.add.overlap(this.player, bombGroup, restartGame, null, this);
 
+    
+
 
 
 
@@ -275,6 +294,19 @@ function create()
     for (var i = 0; i < 50; i++) {                  //підлога
         coin = coinGroup.create(3000 +i*100 , 100 , "coin");
     }
+
+    zombeGroupe = this.physics.add.group();
+    this.physics.add.collider(zombeGroupe, platform2Group);
+    this.physics.add.collider(zombeGroupe, platforms);
+
+    
+
+    var zombe = zombeGroupe.create(4200 , 400 , "zombe").setScale(0.5);
+
+    //this.physics.add.overlap(this.player, zombeGroupe, restartGame, null, this);
+
+
+    
  
 
 
@@ -283,12 +315,39 @@ function create()
 
 function update()
 {
+     playerCoordText.setText('Player: X: ' + this.player.x.toFixed(2) + ', Y: ' + this.player.y.toFixed(2));
+
+    // Встановлення позиції тексту відносно позиції героя та камери
+    playerCoordText.x = this.cameras.main.scrollX - 100; // Змістіть це значення вправо або вліво, щоб відрегулювати положення тексту відносно героя
+
+
+    zombeGroupe.children.iterate(function(zombe) {
+        
+        let direction = (this.player.x < zombe.x) ? -1 : 1; 
+        
+        zombe.setVelocityX(direction * 100);
+        if(direction < 0){
+            zombe.anims.play("zombe" , true);
+            zombe.flipX = true; 
+        } else if (direction > 0){
+            zombe.anims.play("zombe" , true);
+            zombe.flipX = false; 
+        } else if(direction = 0){
+            zombe.flipX = false; 
+            zombe.anims.play("zombe" , false);
+        }
+
+    }, this); 
+
     scoreText.x = this.cameras.main.scrollX + 0; 
     scoreText.y = this.cameras.main.scrollY + 20;
 
     bombGroup.setVelocityX(-300)
     bombGroup.setVelocityY(80*by)
 
+
+
+    
 
     if (cursors.left.isDown) {
         this.player.setVelocityX(-40*speed);
@@ -352,7 +411,10 @@ function collectCoin(player , coin)
 function teleport (lvl , player){
     if (lvl = 1 && score > 15 ) {
         this.player.x = 4000 ;
-        lvl ++ ;
+        this.lvl = 2  ;
+
+
+
 
         //// lvl 2
 
@@ -364,7 +426,7 @@ function createBomb(x) {
      // Прибрати монету
     
     // Створення бомби
-
+    if(this.lvl = 2){
     x = Phaser.Math.Between(-5, 5);
     
     bomb = bombGroup.create(6300 + x*200, 0, 'bomb').setScale(0.5);
@@ -372,13 +434,9 @@ function createBomb(x) {
     x = Phaser.Math.Between(-5, 5);
 
     bomb = bombGroup.create(5300 - x*500, 0, 'bomb').setScale(0.5);
+    }
 
-    x = Phaser.Math.Between(-5, 5);
-    
-    bomb = bombGroup.create(6300 + x*200, 0, 'bomb').setScale(0.5);
-    
-
-    // Встановлення взаємодії бомби з платформами другого рівня
+    // Встановлення взаємодії бомби з платформами о рівня
     
 }
 
