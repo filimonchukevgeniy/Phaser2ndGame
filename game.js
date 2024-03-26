@@ -27,7 +27,7 @@ var score = 0 ;
 var platform_x = 1;
 var worldWidth = 10000;
 var scoreText;
-var lvl = 2 ;
+var lvl = 1 ;
 var by = 1 ;
 var x = Phaser.Math.Between(-5, 5);
 
